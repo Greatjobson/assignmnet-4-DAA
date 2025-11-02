@@ -40,5 +40,19 @@ public class Main {
         System.out.println("\nRunning topological sort...");
         TopoResult topoResult = TopoSort.kahn(dag);
         System.out.println(topoResult);
+
+        // Stage 5: Compute shortest paths from source 0 on the DAG
+        // PathResult.getDist() returns distances array; unreachable vertices may be represented by 2147483648.
+        PathResult shortest = DAGShortestPaths.computeShortest(dag, 0);
+        System.out.println("Shortest distances: ");
+        for (int i = 0; i < shortest.getDist().length; i++)
+            System.out.println("0 -> " + i + " = " + shortest.getDist()[i]);
+
+        // Stage 6: Compute longest paths from source 0 on the DAG
+        // PathResult.getDist() returns distances array; unreachable vertices may be represented by -2147483648.
+        PathResult longest = DAGLongestPath.computeLongest(dag, 0);
+        System.out.println("\nLongest distances: ");
+        for (int i = 0; i < longest.getDist().length; i++)
+            System.out.println("0 -> " + i + " = " + longest.getDist()[i]);
     }
 }
