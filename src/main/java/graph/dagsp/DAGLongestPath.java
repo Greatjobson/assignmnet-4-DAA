@@ -2,12 +2,30 @@ package graph.dagsp;
 
 import graph.model.Graph;
 import graph.topo.TopoSort;
+import graph.topo.TopoResult;
+import util.metrics.Metrics;
+
 import java.util.List;
 
+/**
+ * DAG Longest Path algorithm (works only on DAGs).
+ * Tracks relaxations and total time.
+ */
 public class DAGLongestPath {
 
+    /**
+     * Computes longest paths from a single source in a DAG.
+     * @param dag directed acyclic graph
+     * @param src source vertex
+     * @return longest path distances and predecessors
+     */
     public static PathResult computeLongest(Graph dag, int src) {
-        List<Integer> topoOrder = TopoSort.kahn(dag).getOrder();
+        Metrics metrics = new Metrics();
+        metrics.startTimer();
+
+        TopoResult topoResult = TopoSort.kahn(dag);
+        List<Integer> topoOrder = topoResult.getOrder();
+
         int n = dag.size();
         int[] dist = new int[n];
         int[] prev = new int[n];
@@ -21,14 +39,19 @@ public class DAGLongestPath {
         for (int u : topoOrder) {
             if (dist[u] != Integer.MIN_VALUE) {
                 for (var e : dag.getEdges(u)) {
+                    metrics.incrementCounter("Edges processed");
                     if (dist[e.v] < dist[u] + e.w) {
                         dist[e.v] = dist[u] + e.w;
                         prev[e.v] = u;
+                        metrics.incrementCounter("Relaxations");
                     }
                 }
             }
         }
 
-        return new PathResult(dist, prev);
+        metrics.stopTimer();
+        long time = metrics.getExecutionTime();
+
+        return new PathResult(dist, prev, metrics, time);
     }
 }

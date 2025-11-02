@@ -24,6 +24,7 @@ public class Main {
         SCCKosaraju scc = new SCCKosaraju(g);
         SCCResult result = scc.run();
         System.out.println(result);
+        scc.getMetrics().printMetrics();
 
         // Stage 3: Build condensation DAG from SCC result
         Graph dag = CondensationGraph.build(g, result);
@@ -40,6 +41,7 @@ public class Main {
         System.out.println("\nRunning topological sort...");
         TopoResult topoResult = TopoSort.kahn(dag);
         System.out.println(topoResult);
+        topoResult.getMetrics().printMetrics();
 
         // Stage 5: Compute shortest paths from source 0 on the DAG
         // PathResult.getDist() returns distances array; unreachable vertices may be represented by 2147483648.
@@ -47,6 +49,7 @@ public class Main {
         System.out.println("Shortest distances: ");
         for (int i = 0; i < shortest.getDist().length; i++)
             System.out.println("0 -> " + i + " = " + shortest.getDist()[i]);
+        shortest.getMetrics().printMetrics();
 
         // Stage 6: Compute longest paths from source 0 on the DAG
         // PathResult.getDist() returns distances array; unreachable vertices may be represented by -2147483648.
@@ -54,5 +57,6 @@ public class Main {
         System.out.println("\nLongest distances: ");
         for (int i = 0; i < longest.getDist().length; i++)
             System.out.println("0 -> " + i + " = " + longest.getDist()[i]);
+        longest.getMetrics().printMetrics();
     }
 }
