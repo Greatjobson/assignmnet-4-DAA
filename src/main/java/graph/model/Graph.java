@@ -45,4 +45,11 @@ public class Graph {
         }
         return rev;
     }
+    public int getEdgeCount() {
+        int count = 0;
+        for (List<Edge> edges : adj) {
+            count += edges.size();
+        }
+        return directed ? count : count / 2;
+    }
 }

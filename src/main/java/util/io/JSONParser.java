@@ -39,6 +39,15 @@ public class JSONParser {
     public static Graph loadGraph(String path) {
         try (FileReader reader = new FileReader(path)) {
             JsonObject obj = JsonParser.parseReader(reader).getAsJsonObject();
+
+            // Check essential fields
+            if (!obj.has("n"))
+                throw new IllegalArgumentException("Missing field 'n' (number of vertices).");
+            if (!obj.has("directed"))
+                throw new IllegalArgumentException("Missing field 'directed' (true/false).");
+            if (!obj.has("edges"))
+                throw new IllegalArgumentException("Missing field 'edges' (edge list).");
+
             boolean directed = obj.get("directed").getAsBoolean();
             int n = obj.get("n").getAsInt();
 
@@ -47,9 +56,14 @@ public class JSONParser {
             JsonArray edges = obj.getAsJsonArray("edges");
             for (JsonElement e : edges) {
                 JsonObject edge = e.getAsJsonObject();
+
+                // Validate edge fields
+                if (!edge.has("u") || !edge.has("v"))
+                    throw new IllegalArgumentException("Edge missing 'u' or 'v' field: " + edge);
+
                 int u = edge.get("u").getAsInt();
                 int v = edge.get("v").getAsInt();
-                int w = edge.get("w").getAsInt();
+                int w = edge.has("w") ? edge.get("w").getAsInt() : 1; // default weight = 1
                 graph.addEdge(u, v, w);
             }
 
