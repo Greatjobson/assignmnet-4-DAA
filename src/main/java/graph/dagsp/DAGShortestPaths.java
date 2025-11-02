@@ -53,8 +53,6 @@ public class DAGShortestPaths {
         metrics.stopTimer();
         long time = metrics.getExecutionTime();
 
-        // Можно вывести метрики вручную позже
-        // metrics.printMetrics();
 
         return new PathResult(dist, prev, metrics, time);
     }

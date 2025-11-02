@@ -63,7 +63,7 @@ public class TopoSort {
         if (order.size() != n)
             throw new IllegalStateException("Graph is not a DAG!");
 
-        // You can print or later call metrics.printMetrics() externally
+
 
 
         return new TopoResult(order, time, metrics);
