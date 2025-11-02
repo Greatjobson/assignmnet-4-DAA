@@ -55,7 +55,7 @@ Requirements
 Java 17+
 Maven 3.6+
 Build
-cd assignment-4-ВФФ
+cd assignment-4-DAA
 mvn clean compile
 Run Analysis
 ## Run main class
